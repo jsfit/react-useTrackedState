@@ -29,7 +29,5 @@ function MyComponent(){
       <p>{counter.value}</p>
   ) 
 }
-
-<a href="https://codesandbox.io/s/react-usetrackedstate-bujiu">Codesandbox Example</a>
-
 ```
+<a href="https://codesandbox.io/s/react-usetrackedstate-bujiu">Codesandbox Example</a>
