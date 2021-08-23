@@ -70,11 +70,10 @@ function createOnChangeProxy(onChange, target, isPrototype = true) {
         },
         apply(target, thisArg, argumentsList) {
 
-            if (argumentsList.length && typeof argumentsList[0] === "object") {
+            if (target.name === "set" && argumentsList.length && typeof argumentsList[0] === "object") {
                 for (const [key, value] of Object.entries(argumentsList[0])) {
                     thisArg[key] = value
                 }
-                onChange(argumentsList[0])
             }
 
             return true
@@ -88,9 +87,8 @@ module.exports = function useTrackedState(val) {
     const isObject = React.useRef(typeof val === "object")
     const [state, setState] = React.useState(isObject.current ? val : { value: val })
 
-    const debounceSetState = React.useCallback(debounce((data) => setState((v) => { return data ? { ...data } : { ...v } }), 1));
+    const debounceSetState = React.useCallback(debounce((data) => setState((v) => { return { ...v } }), 1));
 
     const proxyState = React.useRef(createOnChangeProxy(debounceSetState, state)).current
-
     return proxyState
 }
