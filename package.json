@@ -1,0 +1,22 @@
+{
+  "name": "react-usetrackedstate",
+  "version": "0.0.1",
+  "description": "Tracked property for react and react native similer to Ember object",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jsfit/react-useTrackedState.git"
+  },
+  "keywords": [
+    "react"
+  ],
+  "author": "MUHAMMAD ILYAS",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jsfit/react-useTrackedState/issues"
+  },
+  "homepage": "https://github.com/jsfit/react-useTrackedState#readme"
+}
