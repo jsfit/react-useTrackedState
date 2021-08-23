@@ -10,11 +10,14 @@
 ```shell
 $ npm i react-usetrackedstate
 ```
+```shell
+$ yarn add react-usetrackedstate
+```
 
 ```javascript
 import useTrackedState from 'react-usetrackedstate'
 function MyComponent(){
-  const counter = useTrackedState(0)
+  const counter = useTrackedState({ value: 0 })
 
   useEffect(() => {
     setInterval(() => {
@@ -26,4 +29,7 @@ function MyComponent(){
       <p>{counter.value}</p>
   ) 
 }
+
+<a href="https://codesandbox.io/s/react-usetrackedstate-bujiu">Codesandbox Example</a>
+
 ```
