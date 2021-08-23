@@ -49,11 +49,18 @@ function debounce(func, wait, immediate) {
 
 // Deep proxy referance by
 // https://stackoverflow.com/a/58983264
-function createOnChangeProxy(onChange, target) {
+function createOnChangeProxy(onChange, target, isPrototype = true) {
+
+    if (isPrototype) {
+        Object.setPrototypeOf(target, {
+            set: () => { }
+        });
+    }
+
     return new Proxy(target, {
         get(target, property) {
             const item = target[property]
-            if (item && typeof item === 'object') return createOnChangeProxy(onChange, item)
+            if (item && (typeof item === 'object' || typeof item === 'function')) return createOnChangeProxy(onChange, item, false)
             return item
         },
         set(target, property, newValue) {
@@ -61,13 +68,27 @@ function createOnChangeProxy(onChange, target) {
             onChange()
             return true
         },
+        apply(target, thisArg, argumentsList) {
+
+            if (argumentsList.length && typeof argumentsList[0] === "object") {
+                for (const [key, value] of Object.entries(argumentsList[0])) {
+                    thisArg[key] = value
+                }
+                onChange(argumentsList[0])
+            }
+
+            return true
+        }
+
     })
+
 }
 
 module.exports = function useTrackedState(val) {
     const isObject = React.useRef(typeof val === "object")
     const [state, setState] = React.useState(isObject.current ? val : { value: val })
-    const debounceSetState = React.useCallback(debounce(() => setState((v) => { return { ...v } }), 1));
+
+    const debounceSetState = React.useCallback(debounce((data) => setState((v) => { return data ? { ...data } : { ...v } }), 1));
 
     const proxyState = React.useRef(createOnChangeProxy(debounceSetState, state)).current
 
