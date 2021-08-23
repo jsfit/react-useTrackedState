@@ -15,12 +15,12 @@ $ npm i react-usetrackedstate
 import useTrackedState from 'react-usetrackedstate'
 function MyComponent(){
   const counter = useTrackedState(0)
-  
-  useEffect(()=>{
+
+  useEffect(() => {
     setInterval(() => {
       counter.value++;
     }, 1000);
-  },[])
+  }, [])
 
   return (
       <p>{counter.value}</p>
