@@ -76,7 +76,7 @@ function createOnChangeProxy(onChange, target, isPrototype = true) {
                 }
             }
 
-            return true
+            return target.apply(thisArg, argumentsList);
         }
 
     })
