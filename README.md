@@ -39,12 +39,12 @@ function MyComponent(){
   useEffect(() => {
 
     const responseFromApi = {
-      name: "ilyas",
-      email: "mail.ilyas@yahoo.com"
+      name: "npm",
+      email: "npm@npm.com"
     };
 
     user.set(responseFromApi);
-    user.package = "Gold";
+    user.package = "Github";
 
   }, [])
 

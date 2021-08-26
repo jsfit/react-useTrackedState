@@ -1,6 +1,6 @@
 {
   "name": "react-usetrackedstate",
-  "version": "0.0.4",
+  "version": "0.0.6",
   "description": "Tracked property for react and react native similer to Ember object",
   "main": "index.js",
   "scripts": {
