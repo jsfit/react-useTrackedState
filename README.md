@@ -30,4 +30,31 @@ function MyComponent(){
   ) 
 }
 ```
+
+```javascript
+import useTrackedState from 'react-usetrackedstate'
+function MyComponent(){
+  const user = useTrackedState({})
+
+  useEffect(() => {
+
+    const responseFromApi = {
+      name: "ilyas",
+      email: "mail.ilyas@yahoo.com"
+    };
+
+    user.set(responseFromApi);
+    user.package = "Gold";
+
+  }, [])
+
+  return (
+      <>
+        <p>{user.name}</p>
+        <p>{user.email}</p>
+        <p>{user.package}</p>
+      </>
+  ) 
+}
+```
 <a href="https://codesandbox.io/s/react-usetrackedstate-bujiu">Codesandbox Example</a>
