@@ -84,9 +84,9 @@ function createOnChangeProxy(onChange, target, isPrototype = true) {
                 newValue.value = target["value"];
                 newValue.addEventListener("input", (e) => {
                     target["value"] = newValue.value;
-                    onChange();
                 });
             }
+            onChange();
             return true;
         },
         apply(target, thisArg, argumentsList) {
