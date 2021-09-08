@@ -55,8 +55,18 @@ function createOnChangeProxy(onChange, target, isPrototype = true) {
     if (isPrototype) {
         Object.setPrototypeOf(target, {
             set: () => { },
-            toJson: () => {
-                return "yes"
+            getProperties: () => {
+                let obj = {}
+                for (const [key, value] of Object.entries(target)) {
+                    obj[key] = value
+
+                    if (typeof value === "object") {
+                        if (value.hasOwnProperty('value')) {
+                            obj[key] = value["value"];
+                        }
+                    }
+                }
+                return obj;
             }
         });
     }
@@ -74,9 +84,9 @@ function createOnChangeProxy(onChange, target, isPrototype = true) {
                 newValue.value = target["value"];
                 newValue.addEventListener("input", (e) => {
                     target["value"] = newValue.value;
-                    onChange();
                 });
             }
+            onChange();
             return true;
         },
         apply(target, thisArg, argumentsList) {
