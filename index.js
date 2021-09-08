@@ -1,5 +1,6 @@
 
 // eslint-disable-next-line react-hooks/exhaustive-deps
+
 const React = require('react')
 
 
@@ -53,7 +54,20 @@ function createOnChangeProxy(onChange, target, isPrototype = true) {
 
     if (isPrototype) {
         Object.setPrototypeOf(target, {
-            set: () => { }
+            set: () => { },
+            getProperties: () => {
+                let obj = {}
+                for (const [key, value] of Object.entries(target)) {
+                    obj[key] = value
+
+                    if (typeof value === "object") {
+                        if (value.hasOwnProperty('value')) {
+                            obj[key] = value["value"];
+                        }
+                    }
+                }
+                return obj;
+            }
         });
     }
 
@@ -65,8 +79,15 @@ function createOnChangeProxy(onChange, target, isPrototype = true) {
         },
         set(target, property, newValue) {
             target[property] = newValue
-            onChange()
-            return true
+
+            if (newValue && newValue.tagName === "INPUT") {
+                newValue.value = target["value"];
+                newValue.addEventListener("input", (e) => {
+                    target["value"] = newValue.value;
+                });
+            }
+            onChange();
+            return true;
         },
         apply(target, thisArg, argumentsList) {
 
@@ -74,6 +95,10 @@ function createOnChangeProxy(onChange, target, isPrototype = true) {
                 for (const [key, value] of Object.entries(argumentsList[0])) {
                     thisArg[key] = value
                 }
+            }
+
+            if (argumentsList.includes("current") && thisArg["current"] === undefined) {
+                thisArg["current"] = null;
             }
 
             return target.apply(thisArg, argumentsList);
@@ -87,7 +112,8 @@ module.exports = function useTrackedState(val) {
     const isObject = React.useRef(typeof val === "object")
     const [state, setState] = React.useState(isObject.current ? val : { value: val })
 
-    const debounceSetState = React.useCallback(debounce((data) => setState((v) => { return { ...v } }), 1));
+    // eslint-disable-next-line
+    const debounceSetState = React.useCallback(debounce((data) => setState((v) => { return { ...v } }), 1,), []);
 
     const proxyState = React.useRef(createOnChangeProxy(debounceSetState, state)).current
     return proxyState
